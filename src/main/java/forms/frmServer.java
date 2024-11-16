@@ -414,6 +414,22 @@ public class frmServer extends javax.swing.JFrame implements Runnable {
                         double tasaConversionEURToUSD = 1.18; 
                         dMontoConvertido = dAmount * tasaConversionEURToUSD;  
                         System.out.println("Conversion de EUR a USD: " + dMontoConvertido);
+                    } else if (sMonedaRemitente.equals("$") && sMonedaReceptor.equals("JPY")) {
+                        double tasaConversion = 110.0;
+                        dMontoConvertido = dAmount * tasaConversion;
+                        System.out.println("Conversión de USD a JPY: " + dMontoConvertido);
+                    } else if (sMonedaRemitente.equals("JPY") && sMonedaReceptor.equals("$")) {
+                        double tasaConversion = 0.0091;
+                        dMontoConvertido = dAmount * tasaConversion;
+                        System.out.println("Conversión de JPY a USD: " + dMontoConvertido);
+                    } else if (sMonedaRemitente.equals("$") && sMonedaReceptor.equals("MX$")) {
+                        double tasaConversion = 20.0;
+                        dMontoConvertido = dAmount * tasaConversion;
+                        System.out.println("Conversión de USD a MXN: " + dMontoConvertido);
+                    } else if (sMonedaRemitente.equals("MX$") && sMonedaReceptor.equals("$")) {
+                        double tasaConversion = 0.05;
+                        dMontoConvertido = dAmount * tasaConversion;
+                        System.out.println("Conversión de MXN a USD: " + dMontoConvertido);
                     } else {
                         System.out.println("No se necesita conversion. Remitente: '" + sMonedaRemitente + "' Receptor: '" + sMonedaReceptor + "'");
                     }

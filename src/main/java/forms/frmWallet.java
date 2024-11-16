@@ -36,6 +36,8 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
 
     public frmWallet() {
         initComponents();
+        this.setSize(500, 600); // Por ejemplo, 800x600 píxeles
+        this.setResizable(false); // Opcional, para evitar que el usuario redimensione la ventana
         this.setResizable(false);
         oCifrado = new Cifrado("ñVbFg-98+*DsHgñ");
     }
@@ -83,6 +85,7 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
     switch (sPaisReceptor) {
     case "ESTADOS UNIDOS":
     case "CANADÁ":
+    case "EL SALVADOR":
     case "PANAMÁ":
     case "ECUADOR":
     case "BELICE":
@@ -93,7 +96,18 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
     case "ITALIA":
     case "ESPAÑA":
     case "BÉLGICA":
+    case "PORTUGAL":
+    case "IRLANDA":
+    case "FINLANDIA":
         sMonedaReceptor = "€"; // EUR
+        break;
+    case "JAPÓN":
+        sMonedaReceptor = "¥"; // JPY
+        break;
+
+    // País que utiliza MXN
+    case "MÉXICO":
+        sMonedaReceptor = "MX$"; // MXN
         break;
 }
 
