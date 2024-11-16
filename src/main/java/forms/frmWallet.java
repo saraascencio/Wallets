@@ -36,6 +36,8 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
 
     public frmWallet() {
         initComponents();
+        this.setSize(500, 600); // Por ejemplo, 800x600 píxeles
+        this.setResizable(false); // Opcional, para evitar que el usuario redimensione la ventana
         this.setResizable(false);
         oCifrado = new Cifrado("ñVbFg-98+*DsHgñ");
     }
@@ -83,6 +85,7 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
     switch (sPaisReceptor) {
     case "ESTADOS UNIDOS":
     case "CANADÁ":
+    case "EL SALVADOR":
     case "PANAMÁ":
     case "ECUADOR":
     case "BELICE":
@@ -93,7 +96,18 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
     case "ITALIA":
     case "ESPAÑA":
     case "BÉLGICA":
+    case "PORTUGAL":
+    case "IRLANDA":
+    case "FINLANDIA":
         sMonedaReceptor = "€"; // EUR
+        break;
+    case "JAPÓN":
+        sMonedaReceptor = "¥"; // JPY
+        break;
+
+    // País que utiliza MXN
+    case "MÉXICO":
+        sMonedaReceptor = "MX$"; // MXN
         break;
 }
 
@@ -176,7 +190,7 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
 
         jLabel2.setText("Server:");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(60, 320, 47, 18);
+        jLabel2.setBounds(60, 320, 40, 18);
         getContentPane().add(txtAmount);
         txtAmount.setBounds(170, 200, 110, 40);
 
@@ -217,7 +231,7 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("IP/port");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(80, 70, 250, 18);
+        jLabel7.setBounds(80, 70, 250, 21);
 
         lUser.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         lUser.setForeground(new java.awt.Color(128, 0, 0));
@@ -249,7 +263,7 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
         lblMoneda.setFont(new java.awt.Font("Liberation Sans", 0, 24)); // NOI18N
         lblMoneda.setText("$");
         getContentPane().add(lblMoneda);
-        lblMoneda.setBounds(40, 390, 20, 40);
+        lblMoneda.setBounds(40, 390, 60, 30);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

@@ -95,11 +95,17 @@ public class frmWorld extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Servidor:");
 
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         jLabel10.setFont(new java.awt.Font("URW Gothic", 0, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Moneda:");
 
-        comboMoneda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "USD", "EUR" }));
+        comboMoneda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "USD", "EUR", "JPY", "MXN", "CAD" }));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -190,7 +196,7 @@ public class frmWorld extends javax.swing.JFrame {
 
         jLabel7.setText("and");
 
-        comboUbicacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Estados Unidos", "Canadá", "Panamá", "Ecuador", "Belice", "Alemania", "Francia", "Italia", "España", "Bélgica" }));
+        comboUbicacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Estados Unidos", "Canadá", "El Salvador", "Japón", "Panamá", "México", "Ecuador", "Portugal", "Belice", "Finlandia", "Alemania", "Francia", "Italia", "Irlanda", "España", "Bélgica" }));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -359,8 +365,14 @@ public class frmWorld extends javax.swing.JFrame {
             simboloMoneda = "$";
         } else if ("EUR".equals(selectedMoneda)) {
             simboloMoneda = "€";
+        }else if ("JPY".equals(selectedMoneda)) {
+            simboloMoneda = "¥";
+        } else if ("MXN".equals(selectedMoneda)) {
+            simboloMoneda = "MX$";
+        }else if ("CAD".equals(selectedMoneda)) {
+            simboloMoneda = "C$";
         }
-
+        
 
         String sClient = this.txtClient.getText().trim().toUpperCase();
         double dBalance = Double.parseDouble(this.txtBalance.getText().trim());
@@ -401,6 +413,54 @@ public class frmWorld extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+        
+        
+        String paisSeleccionado = (String) jComboBox1.getSelectedItem();
+
+        // Asigna la moneda correspondiente
+        String moneda = obtenerMonedaPorPais(paisSeleccionado);
+
+        // Actualiza el combo de monedas
+        comboMoneda.setSelectedItem(moneda);
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private String obtenerMonedaPorPais(String pais) {
+
+         switch (pais.toLowerCase()) {
+        // USD - Dólar Estadounidense
+        case "estados unidos": return "USD";
+        case "panamá": return "USD";
+        case "ecuador": return "USD";
+        case "belice": return "USD";
+        case "el salvador": return "USD";
+
+        // EUR - Euro
+        case "alemania": return "EUR";
+        case "francia": return "EUR";
+        case "italia": return "EUR";
+        case "españa": return "EUR";
+        case "bélgica": return "EUR";
+        case "portugal": return "EUR";
+        case "irlanda": return "EUR";
+        case "finlandia": return "EUR";
+
+        // JPY - Yen Japonés
+        case "japón": return "JPY";
+
+        // MXN - Peso Mexicano
+        case "méxico": return "MXN";
+
+        // CAD - Dólar Canadiense
+        case "canadá": return "CAD";
+
+        // Moneda predeterminada (USD)
+        default: return "USD";
+    }
+}
+
+    
     /**
      * @param args the command line arguments
      */
