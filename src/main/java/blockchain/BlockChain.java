@@ -116,7 +116,8 @@ public class BlockChain {
             Transaction transaction = currentBlock.getTransaction(j);
 
             // Si el cliente es el receptor de la transacción
-            // Mexico
+            // Italia
+            //Japon, la moneda ya va en YEN
             if (transaction.getReceiver().trim().equalsIgnoreCase(pClient.trim())) {
                 double amountReceived = transaction.getAmount();
                 String sMonedaTransaccion = transaction.getMonedaReceptor(); // Moneda del receptor (de la transacción)
@@ -131,6 +132,7 @@ public class BlockChain {
 
             // Si el cliente es el remitente de la transacción
             // USA 
+            //USA
             if (transaction.getSender().trim().equalsIgnoreCase(pClient.trim())) {
                 double amountSent = transaction.getAmount();
                 String sMonedaTransaccion = transaction.getMonedaReceptor(); // Moneda del remitente (de la transacción)
@@ -170,6 +172,10 @@ private double convertirMoneda(double amount, String monedaOrigen, String moneda
         tasaConversion = 20.0; // Ejemplo de tasa de conversión de USD a MXN
     } else if (monedaOrigen.equals("MX$") && monedaDestino.equals("$")) {
         tasaConversion = 0.05; // Ejemplo de tasa de conversión de MXN a USD
+    } else if (monedaOrigen.equals("¥") && monedaDestino.equals("€")) {
+        tasaConversion = 0.0077; // Ejemplo de tasa de conversión de JPY a EUR
+    } else if (monedaOrigen.equals("€") && monedaDestino.equals("¥")) {
+        tasaConversion = 130.0; // Ejemplo de tasa de conversión de EUR a JPY
     } else {
         System.out.println("No se necesita conversión. Moneda Origen: '" + monedaOrigen + "' Moneda Destino: '" + monedaDestino + "'");
     }
@@ -177,7 +183,6 @@ private double convertirMoneda(double amount, String monedaOrigen, String moneda
     // Realizamos la conversión
     return amount * tasaConversion;
 }
-
 
 
 
@@ -239,22 +244,22 @@ private double convertirMoneda(double amount, String monedaOrigen, String moneda
     }
 
     //➜
-    public String transactionReport(int nBlock) {
+    public String transactionReport(int nBlock, int[] transactionCounter) {
     // Verificar que el índice del bloque sea válido
     if (nBlock < 0 || nBlock >= this.blockChain.size()) {
         return "Bloque no encontrado.";
     }
 
-    StringBuilder sCad = new StringBuilder();  // Usar StringBuilder para mayor eficiencia
+    StringBuilder sCad = new StringBuilder();  
     Block blk = this.blockChain.get(nBlock);
 
-    // Iterar sobre las transacciones del bloque
     for (int i = 0; i < blk.countTransactions(); i++) {
-        // Asegurarse de que no se acceda a un índice fuera de rango
         Transaction tran = blk.getTransaction(i);
         sCad.append("\tTransaccion #")
-            .append(tran.getId())
-            .append(": $")
+            .append(transactionCounter[0]++) // Usar y actualizar el contador global
+            .append(": ")
+            .append(tran.getMonedaReceptor())
+            .append(" ")
             .append(tran.getAmount())
             .append(".\t(")
             .append(tran.getSender())

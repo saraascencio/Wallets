@@ -371,11 +371,11 @@ public class frmTester extends javax.swing.JFrame {
               "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
         this.jTextArea1.setText(cad1);
         String cad2= "";
-        for(int i=1; i<bc.size(); i++)
+        /**for(int i=1; i<bc.size(); i++)
         {
             cad2+= "Block ID: "+Integer.toString(bc.getBlock(i).getId())+ bc.transactionReport(bc.getBlock(i).getId())+
                    "----------------------------------------------------------------------------------------------------------------------------\n";
-        }
+        }**/
         this.jTextArea2.setText(cad2);
         this.jButton3.setEnabled(true);
     }//GEN-LAST:event_jButton3ActionPerformed
