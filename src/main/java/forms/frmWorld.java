@@ -382,11 +382,12 @@ public class frmWorld extends javax.swing.JFrame {
     }
 
     private void broadcastClients() {
- 
-        for (int i = 0; i < this.aFrmNodes.size(); i++) {
-            ((frmServer) this.aFrmNodes.get(i)).registerClients(this.aClients);
-        }
+    for (int i = 0; i < this.aFrmNodes.size(); i++) {
+        // Envía la lista completa de clientes sin pasar una moneda global
+        ((frmServer) this.aFrmNodes.get(i)).registerClients(this.aClients);
     }
+    }
+
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
       
@@ -412,10 +413,16 @@ public class frmWorld extends javax.swing.JFrame {
         int iServer = this.jComboBox1.getSelectedIndex();
         int iSocket = Integer.parseInt(this.jTextField4.getText());
 
+        
+        /*Aca le paso su moneda*/
 
-        NodeData nClient = new NodeData(sClient,
-                this.aServers.get(iServer).getIPAddress(),
-                iSocket + this.aClients.size());
+        NodeData nClient = new NodeData(
+                        sClient, // Nombre del cliente
+                        this.aServers.get(iServer).getIPAddress(), // Dirección IP del servidor seleccionado
+                        iSocket + this.aClients.size(), // Número de socket único
+                        simboloMoneda // Moneda específica para este cliente
+                        );
+
 
 
         this.aClients.add(nClient);

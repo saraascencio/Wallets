@@ -358,11 +358,16 @@ public class frmServer extends javax.swing.JFrame implements Runnable {
         this.bc.mineBlock();
     }
 
+    
     public void registerClients(ArrayList<NodeData> aNClients) {
-        this.aClients = aNClients;
-        this.listBalances();
+    this.aClients = aNClients;
+
+    this.listBalances();
+
     }
 
+
+    
     public boolean broadcastBlock(Block pBlk) {
         try {
             for (int i = 0; i < this.aOtherServers.size(); i++) {
@@ -391,6 +396,7 @@ public class frmServer extends javax.swing.JFrame implements Runnable {
                 ObjectInputStream ois = new ObjectInputStream(is);
                 Block blk = (Block) ois.readObject();
                 socket.close();
+                double montoCondicion = 0;
 
                 if (blk.getId() < 0) { 
                     String sSender = this.oCifrado.desencriptar(blk.getTransaction(0).getSender());
@@ -403,42 +409,55 @@ public class frmServer extends javax.swing.JFrame implements Runnable {
                    /*Esos print se usaron para hacer 
                     pruebas solamente*/
                     double dMontoConvertido = dAmount;
+                   
                     System.out.println("Moneda Remitente: '" + sMonedaRemitente + "'");
                     System.out.println("Moneda Receptor: '" + sMonedaReceptor + "'");
 
                     if (sMonedaRemitente.equals("$") && sMonedaReceptor.equals("€")) {
                         double tasaConversionUSDToEUR = 0.85; 
-                        dMontoConvertido = dAmount * tasaConversionUSDToEUR;  
+                        dMontoConvertido = dAmount * tasaConversionUSDToEUR;
+                        montoCondicion = this.bc.getBalance(sSender) * tasaConversionUSDToEUR;
+                                
                         System.out.println("Conversion de USD a EUR: " + dMontoConvertido);
                     } else if (sMonedaRemitente.equals("€") && sMonedaReceptor.equals("$")) {
                         double tasaConversionEURToUSD = 1.18; 
-                        dMontoConvertido = dAmount * tasaConversionEURToUSD;  
+                        dMontoConvertido = dAmount * tasaConversionEURToUSD;
+                        montoCondicion = this.bc.getBalance(sSender) * tasaConversionEURToUSD;
+                        
                         System.out.println("Conversion de EUR a USD: " + dMontoConvertido);
                     } else if (sMonedaRemitente.equals("$") && sMonedaReceptor.equals("¥")) {
                         double tasaConversion = 110.0;
                         dMontoConvertido = dAmount * tasaConversion;
+                        montoCondicion = this.bc.getBalance(sSender) * tasaConversion;
                         System.out.println("Conversión de USD a JPY: " + dMontoConvertido);
                     } else if (sMonedaRemitente.equals("¥") && sMonedaReceptor.equals("$")) {
                         double tasaConversion = 0.0091;
                         dMontoConvertido = dAmount * tasaConversion;
+                        montoCondicion = this.bc.getBalance(sSender) * tasaConversion;
+                        
                         System.out.println("Conversión de JPY a USD: " + dMontoConvertido);
                     } else if (sMonedaRemitente.equals("$") && sMonedaReceptor.equals("MX$")) {
                         double tasaConversion = 20.0;
                         dMontoConvertido = dAmount * tasaConversion;
+                        montoCondicion = this.bc.getBalance(sSender) * tasaConversion;
+                        
                         System.out.println("Conversión de USD a MXN: " + dMontoConvertido);
                     } else if (sMonedaRemitente.equals("MX$") && sMonedaReceptor.equals("$")) {
                         double tasaConversion = 0.05;
                         dMontoConvertido = dAmount * tasaConversion;
+                        montoCondicion = this.bc.getBalance(sSender) * tasaConversion;
                         System.out.println("Conversión de MXN a USD: " + dMontoConvertido);
                     } else {
                         System.out.println("No se necesita conversion. Remitente: '" + sMonedaRemitente + "' Receptor: '" + sMonedaReceptor + "'");
+                        montoCondicion = dAmount;
                     }
 
                    
-                    if (this.bc.getBalance(sSender) >= dMontoConvertido) {
+                    if (montoCondicion >= dMontoConvertido) {
                        
                         this.bc.createBlock();
                         this.bc.getLastBlock().setTransaction(
+                                /**/
                                 new Transaction(0, sSender, sReceiver, dMontoConvertido, sMotivo, sMonedaRemitente, sMonedaReceptor)
                         );
                         this.bc.mineBlock();
@@ -470,7 +489,8 @@ public class frmServer extends javax.swing.JFrame implements Runnable {
         for (int i = 0; i < this.aClients.size(); i++) {
             sCad += this.aClients.get(i).getNodeName()
                     + "= $ "
-                    + Double.toString(this.bc.getBalance(this.aClients.get(i).getNodeName()))
+                    + Double.toString(this.bc.getBalance2(this.aClients.get(i).getNodeName(),
+                            this.aClients.get(i).getCurrency()))
                     + "\n";
         }
         this.txtMessages.setText(sCad);
