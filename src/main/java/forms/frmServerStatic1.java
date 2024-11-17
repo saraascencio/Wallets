@@ -250,14 +250,15 @@ public class frmServerStatic1 extends javax.swing.JFrame implements Runnable {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String sCad="";
+        /*String sCad="";
         for(int i=1; i<this.bc.size(); i++)
         {
             sCad+= "Block "+this.bc.getBlock(i).getId()+". "+
-                    this.bc.transactionReport(this.bc.getBlock(i).getId())
-                    +"-------------------\n";
+                    /*this.bc.transactionReport(this.bc.getBlock(i).getId())*/
+                    /**+"-------------------\n";
         }
         this.txtMessages.setText(sCad);
+        **/
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

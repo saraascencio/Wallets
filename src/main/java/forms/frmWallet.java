@@ -71,86 +71,86 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
     }
 
     public boolean sendTransaction() {
-    String sNode = this.nodeData.getNodeName();
-    String sReceiver = this.txtSend.getText().trim().toUpperCase();
-    Double dAmount = Double.parseDouble(this.txtAmount.getText());
-    String sMotivo = this.comboMotivo.getSelectedItem().toString(); 
-    int iServer = this.jComboBox1.getSelectedIndex();
+        String sNode = this.nodeData.getNodeName();
+        String sReceiver = this.txtSend.getText().trim().toUpperCase();
+        Double dAmount = Double.parseDouble(this.txtAmount.getText());
+        String sMotivo = this.comboMotivo.getSelectedItem().toString();
+        int iServer = this.jComboBox1.getSelectedIndex();
 
-    String sMonedaRemitente = this.lblMoneda.getText();
-    
+        String sMonedaRemitente = this.lblMoneda.getText();
+
    
-    String sPaisReceptor = (String) this.jComboBox1.getSelectedItem();
-    String sMonedaReceptor = "";
-    switch (sPaisReceptor) {
-    case "ESTADOS UNIDOS":
-    case "CANADÁ":
-    case "EL SALVADOR":
-    case "PANAMÁ":
-    case "ECUADOR":
-    case "BELICE":
-        sMonedaReceptor = "$"; // USD
-        break;
-    case "ALEMANIA":
-    case "FRANCIA":
-    case "ITALIA":
-    case "ESPAÑA":
-    case "BÉLGICA":
-    case "PORTUGAL":
-    case "IRLANDA":
-    case "FINLANDIA":
-        sMonedaReceptor = "€"; // EUR
-        break;
-    case "JAPÓN":
-        sMonedaReceptor = "¥"; // JPY
-        break;
+        String sPaisReceptor = (String) this.jComboBox1.getSelectedItem();
+        String sMonedaReceptor = "";
+        switch (sPaisReceptor) {
+            case "ESTADOS UNIDOS":
+            case "CANADÁ":
+            case "EL SALVADOR":
+            case "PANAMÁ":
+            case "ECUADOR":
+            case "BELICE":
+                sMonedaReceptor = "$"; // USD
+                break;
+            case "ALEMANIA":
+            case "FRANCIA":
+            case "ITALIA":
+            case "ESPAÑA":
+            case "BÉLGICA":
+            case "PORTUGAL":
+            case "IRLANDA":
+            case "FINLANDIA":
+                sMonedaReceptor = "€"; // EUR
+                break;
+            case "JAPÓN":
+                sMonedaReceptor = "¥"; // JPY
+                break;
 
-    // País que utiliza MXN
-    case "MÉXICO":
-        sMonedaReceptor = "MX$"; // MXN
-        break;
-}
+            // País que utiliza MXN
+            case "MÉXICO":
+                sMonedaReceptor = "MX$"; // MXN
+                break;
+        }
 
   
-    double dMontoConvertido = dAmount;  
+        double dMontoConvertido = dAmount;
 
    
-    if (dMontoConvertido <= this.dCurrentBalance) {
-        this.jLabel4.setText("Current Balance:");
-        this.dCurrentBalance -= dMontoConvertido;
+        if (dMontoConvertido <= this.dCurrentBalance) {
+            this.jLabel4.setText("Current Balance:");
+            this.dCurrentBalance -= dMontoConvertido;
 
-        try {
-   
-            sNode = this.oCifrado.encriptar(sNode);
-            sReceiver = this.oCifrado.encriptar(sReceiver);
+            try {
+
+                sNode = this.oCifrado.encriptar(sNode);
+                sReceiver = this.oCifrado.encriptar(sReceiver);
 
            
-            Block blk = new Block();
-            blk.setTransaction(sNode, dMontoConvertido, sReceiver, sMotivo, sMonedaRemitente, sMonedaReceptor);  // Pasar monedas sin convertir
+                Block blk = new Block();
+                blk.setTransaction(sNode, dMontoConvertido, sReceiver, sMotivo, sMonedaRemitente, sMonedaReceptor);  // Pasar monedas sin convertir
 
       
-            Socket socket = new Socket(
-                    this.aServers.get(iServer).getIPAddress(),
-                    this.aServers.get(iServer).getSocketNum()
-            );
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            oos.writeObject(blk);
-            socket.close();
+                Socket socket = new Socket(
+                        this.aServers.get(iServer).getIPAddress(),
+                        this.aServers.get(iServer).getSocketNum()
+                );
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.writeObject(blk);
+                socket.close();
 
       
-            this.jLabel4.setText("Current Balance:");
-            this.lBalance.setText(Double.toString(this.dCurrentBalance));
-            return true;
-        } catch (Exception e) {
-    
-            this.dCurrentBalance += dMontoConvertido;
-            this.jLabel5.setText(e.toString());
+                this.jLabel4.setText("Current Balance:");
+                this.lBalance.setText(Double.toString(this.dCurrentBalance));
+                return true;
+            } catch (Exception e) {
+
+                this.dCurrentBalance += dMontoConvertido;
+                this.jLabel5.setText(e.toString());
+            }
+        } else {
+            this.jLabel4.setText("-Insufficient Balance:");
         }
-    } else {
-        this.jLabel4.setText("-Insufficient Balance:");
+        return false;
     }
-    return false;
-}
 
 
 
@@ -264,13 +264,13 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
         lblMoneda.setForeground(new java.awt.Color(0, 0, 0));
         lblMoneda.setText("$");
         getContentPane().add(lblMoneda);
-        lblMoneda.setBounds(270, 430, 20, 40);
+        lblMoneda.setBounds(250, 440, 60, 30);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new javax.swing.OverlayLayout(jPanel1));
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 120, 570, 460);
+        jPanel1.setBounds(0, 120, 570, 450);
 
         jLabel1.setFont(new java.awt.Font("URW Gothic", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));

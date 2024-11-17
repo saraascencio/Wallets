@@ -76,21 +76,115 @@ public class BlockChain {
     }
 
     public double getBalance(String pClient) {
-        double positiveAmount = 0;
-        double negativeAmount = 0;
-        for (int i = 0; i < this.size(); i++) {
-            for (int j = 0; j < this.getBlock(i).countTransactions(); j++) {
-                if (this.getBlock(i).getTransaction(j).getReceiver().equals(pClient)) {
-                    positiveAmount
-                            += this.getBlock(i).getTransaction(j).getAmount();
-                } else if (this.getBlock(i).getTransaction(j).getSender().equals(pClient)) {
-                    negativeAmount
-                            += this.getBlock(i).getTransaction(j).getAmount();
-                }
+    double positiveAmount = 0; // Cantidad recibida
+    double negativeAmount = 0; // Cantidad enviada
+
+    
+    for (int i = 0; i < this.blockChain.size(); i++) {
+        Block currentBlock = this.blockChain.get(i);
+
+        
+        for (int j = 0; j < currentBlock.countTransactions(); j++) {
+            Transaction transaction = currentBlock.getTransaction(j);
+
+           
+            if (transaction.getReceiver().trim().equalsIgnoreCase(pClient.trim())) {
+                positiveAmount += transaction.getAmount();
+            }
+
+            
+            if (transaction.getSender().trim().equalsIgnoreCase(pClient.trim())) {
+                negativeAmount += transaction.getAmount();
             }
         }
-        return positiveAmount - negativeAmount;
     }
+
+    // Retornar saldo neto (recibido - enviado), sin conversión de moneda
+    return positiveAmount - negativeAmount;
+}
+
+    
+    public double getBalance2(String pClient, String sMonedaCliente) {
+    double positiveAmount = 0; // Cantidad recibida
+    double negativeAmount = 0; // Cantidad enviada
+
+    // Recorremos todas las transacciones en la cadena de bloques
+    for (int i = 0; i < this.blockChain.size(); i++) {
+        Block currentBlock = this.blockChain.get(i);
+
+        for (int j = 0; j < currentBlock.countTransactions(); j++) {
+            Transaction transaction = currentBlock.getTransaction(j);
+
+            // Si el cliente es el receptor de la transacción
+            // Italia
+            //Japon, la moneda ya va en YEN
+            if (transaction.getReceiver().trim().equalsIgnoreCase(pClient.trim())) {
+                double amountReceived = transaction.getAmount();
+                String sMonedaTransaccion = transaction.getMonedaReceptor(); // Moneda del receptor (de la transacción)
+
+                // Si la moneda de la transacción es diferente a la moneda del cliente, se convierte
+                if (!sMonedaCliente.equals(sMonedaTransaccion)) {
+                    amountReceived = convertirMoneda(amountReceived, sMonedaTransaccion, sMonedaCliente);
+                }
+
+                positiveAmount += amountReceived;
+            }
+
+            // Si el cliente es el remitente de la transacción
+            // USA 
+            //USA
+            if (transaction.getSender().trim().equalsIgnoreCase(pClient.trim())) {
+                double amountSent = transaction.getAmount();
+                String sMonedaTransaccion = transaction.getMonedaReceptor(); // Moneda del remitente (de la transacción)
+
+                // Si la moneda de la transacción es diferente a la moneda del cliente, se convierte
+                if (!sMonedaCliente.equals(sMonedaTransaccion)) {
+                    amountSent = convertirMoneda(amountSent, sMonedaTransaccion, sMonedaCliente);
+                }
+
+                negativeAmount += amountSent;
+            }
+        }
+    }
+
+    // Retornamos el saldo neto (recibido - enviado), ya convertido a la moneda del cliente
+    return positiveAmount - negativeAmount;
+}
+
+
+    
+    
+
+// Método para realizar la conversión de monedas según las tasas de cambio
+private double convertirMoneda(double amount, String monedaOrigen, String monedaDestino) {
+    double tasaConversion = 1.0; // Valor por defecto (si no hay conversión)
+
+    // Lógica para manejar las conversiones
+    if (monedaOrigen.equals("$") && monedaDestino.equals("€")) {
+        tasaConversion = 0.85; // Ejemplo de tasa de conversión de USD a EUR
+    } else if (monedaOrigen.equals("€") && monedaDestino.equals("$")) {
+        tasaConversion = 1.18; // Ejemplo de tasa de conversión de EUR a USD
+    } else if (monedaOrigen.equals("$") && monedaDestino.equals("¥")) {
+        tasaConversion = 110.0; // Ejemplo de tasa de conversión de USD a JPY
+    } else if (monedaOrigen.equals("¥") && monedaDestino.equals("$")) {
+        tasaConversion = 0.0091; // Ejemplo de tasa de conversión de JPY a USD
+    } else if (monedaOrigen.equals("$") && monedaDestino.equals("MX$")) {
+        tasaConversion = 20.0; // Ejemplo de tasa de conversión de USD a MXN
+    } else if (monedaOrigen.equals("MX$") && monedaDestino.equals("$")) {
+        tasaConversion = 0.05; // Ejemplo de tasa de conversión de MXN a USD
+    } else if (monedaOrigen.equals("¥") && monedaDestino.equals("€")) {
+        tasaConversion = 0.0077; // Ejemplo de tasa de conversión de JPY a EUR
+    } else if (monedaOrigen.equals("€") && monedaDestino.equals("¥")) {
+        tasaConversion = 130.0; // Ejemplo de tasa de conversión de EUR a JPY
+    } else {
+        System.out.println("No se necesita conversión. Moneda Origen: '" + monedaOrigen + "' Moneda Destino: '" + monedaDestino + "'");
+    }
+
+    // Realizamos la conversión
+    return amount * tasaConversion;
+}
+
+
 
     
     public boolean getProofOfWork_overBlock(Block blk) {
@@ -150,22 +244,22 @@ public class BlockChain {
     }
 
     //➜
-    public String transactionReport(int nBlock) {
+    public String transactionReport(int nBlock, int[] transactionCounter) {
     // Verificar que el índice del bloque sea válido
     if (nBlock < 0 || nBlock >= this.blockChain.size()) {
         return "Bloque no encontrado.";
     }
 
-    StringBuilder sCad = new StringBuilder();  // Usar StringBuilder para mayor eficiencia
+    StringBuilder sCad = new StringBuilder();  
     Block blk = this.blockChain.get(nBlock);
 
-    // Iterar sobre las transacciones del bloque
     for (int i = 0; i < blk.countTransactions(); i++) {
-        // Asegurarse de que no se acceda a un índice fuera de rango
         Transaction tran = blk.getTransaction(i);
         sCad.append("\tTransaccion #")
-            .append(tran.getId())
-            .append(": $")
+            .append(transactionCounter[0]++) // Usar y actualizar el contador global
+            .append(": ")
+            .append(tran.getMonedaReceptor())
+            .append(" ")
             .append(tran.getAmount())
             .append(".\t(")
             .append(tran.getSender())

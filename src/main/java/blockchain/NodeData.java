@@ -12,12 +12,31 @@ public class NodeData {
     private String nodeName;
     private String IPAddress;
     private int    socketNum;
+    private String currency;  
+  
     
     public NodeData(String pnodeName, String pIPAddress, int psocketNum)
     {
         this.nodeName= pnodeName;
         this.IPAddress= pIPAddress;
         this.socketNum= psocketNum;
+    }
+    
+    public NodeData(String pnodeName, String pIPAddress, int psocketNum, String pCurrency)
+    {
+        this.nodeName= pnodeName;
+        this.IPAddress= pIPAddress;
+        this.socketNum= psocketNum;
+        this.currency = pCurrency;
+    }
+    
+    
+    public void setCurrency(String currency) {
+    this.currency = currency;
+    }
+    
+    public String getCurrency() {
+        return currency;
     }
 
     /**
