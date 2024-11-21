@@ -39,7 +39,7 @@ public class frmWallet extends javax.swing.JFrame implements Runnable {
         this.setSize(500, 600); // Por ejemplo, 800x600 píxeles
         this.setResizable(false); // Opcional, para evitar que el usuario redimensione la ventana
         this.setResizable(false);
-        oCifrado = new Cifrado("ñVbFg-98+*DsHgñ");
+        oCifrado = new Cifrado();
     }
 
     public void configure(NodeData nodeClient, double pBalance, String simboloMoneda) {
