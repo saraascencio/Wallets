@@ -42,7 +42,7 @@ public class frmServer extends javax.swing.JFrame implements Runnable {
 
     public frmServer(NodeData pnodeData) {
         initComponents();
-        this.oCifrado = new Cifrado("ñVbFg-98+*DsHgñ");
+        this.oCifrado = new Cifrado();
         this.currentNode = pnodeData;
         this.startServer();
 
